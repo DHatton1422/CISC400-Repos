@@ -1,0 +1,36 @@
+<!DOCTYPE html> 
+<html> 
+
+<body>
+ 
+    <p>Check Console for answer</p> 
+
+</body>
+
+    <script type = "text/javascript">
+    function main(matrix) { 
+        //compares i/n with the values of our matrix 
+        for ( i = 0; i < matrix.length; i++){ 
+            for (n = 0; n < matrix.length; n++){ 
+                if (i !== n && matrix[i][n] !== 0) 
+                /* line 17  is from 
+                https://www.w3resource.com/javascript-exercises/javascript-basic-exercise-115.php
+                I couldn't figure it out past that point 
+                */
+                return false;
+                                
+          }
+        }
+       return true; 
+    }
+console.log(main([[1, 0, 0], [0, 2, 0 ], [0, 0, 3] ]));
+console.log(main([[1, 0, 3], [0, 2, 1 ], [1, 0, 3] ]));
+
+
+
+
+    </script> 
+ 
+
+</html> 
+
