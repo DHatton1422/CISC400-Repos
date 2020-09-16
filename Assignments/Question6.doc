@@ -1,0 +1,24 @@
+This question is answered within the comments 
+
+
+
+<script type="text/javascript">
+    'use strict';  // This is used so that we have to specify a global variable 
+    function init() { //our canvas function 
+        const canvas = document.getElementById('webgl-canvas'); //Gets the ID of a HTML element 
+        // Ensure we have a canvas
+        if (!canvas) { // IF you can't find the canvas then throw an error (or if browser doesn't support it)
+            console.error('Sorry! No HTML5 Canvas was found on this page');
+            return;
+        }
+        const gl = canvas.getContext('webgl2');// Has canvas as a constant so that it's unchangable 
+        // Ensure we have a context
+        const message = gl
+            ? 'Hooray! You got a WebGL2 context' // If the browser finds a canvas 
+            : 'Sorry! WebGL is not available';  // else the browser can't find a canvas 
+        alert(message);// Alert the user (pop up) of the above messages
+        }
+    // Call init once the document has loaded
+    window.onload= init; //load our function when the window opens 
+    </script>
+    
