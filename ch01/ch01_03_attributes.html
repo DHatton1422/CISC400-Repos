@@ -15,6 +15,8 @@
 
     // Global variable to access throughout the application
     let gl;
+    var x =  1000; // Global Variable of 1 second 
+    var updater; // Global - Lets the updater be used by every function 
 
     function updateClearColor(...color) {
       // The ES6 spread operator (...) allows for us to
@@ -23,7 +25,7 @@
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.viewport(0, 0, 0, 0);
     }
-
+    
     function checkKey(event) {
       switch (event.keyCode) {
         // number 1 => green
@@ -59,12 +61,25 @@
           window.focus();
           break;
         }
+        // number 8 = Random color every second 
+        case 56: {
+         
+          updater = setInterval('updateClearColor(Math.random(), Math.random(), Math.random(), 1.0)', x);
+          break;    
+        }
+
+        case 57: { 
+           
+          clearInterval(updater);
+          break; 
+        }
+        
       }
     }
 
     function init() {
       const canvas = document.getElementById('webgl-canvas');
-
+      
       if (!canvas) {
         console.error('Sorry! No HTML5 Canvas was found on this page');
         return;

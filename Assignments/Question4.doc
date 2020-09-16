@@ -1,0 +1,10 @@
+Retained Mode Rendering 
+
+Declarative API - Builds Scenes from primitives (shapes/lines). 
+Maintains Scene Model from memory. 
+
+
+Immediate Mode Rendering 
+
+Procedule API - Makes the application manage rendering directly. 
+Each new frame is drawn.
