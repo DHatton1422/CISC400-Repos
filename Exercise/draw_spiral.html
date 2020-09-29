@@ -111,11 +111,13 @@
       function draw_circle(numVertex){
         const x = {vertices: [], indices: [] };
         let k  = 0; 
+        let r = 1;
         
         for (let i = 0; i < numVertex; i++){
-           k += (6 * Math.PI) / numVertex; 
-           x.vertices.push(2 / k * Math.cos(k)); //push cos into vertices
-           x.vertices.push(2 / k * Math.sin(k)); //push sin into veritces
+           k += (12 * Math.PI) / numVertex;
+           r = r - 0.01; 
+           x.vertices.push( r *  Math.cos(k)); //push cos into vertices
+           x.vertices.push( r * Math.sin(k)); //push sin into veritces
            x.vertices.push(0); // so we can produce a circle and not lines
            x.indices.push(i); // push our loop into our indices
         
