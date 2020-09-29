@@ -113,9 +113,9 @@
         let k  = 0; 
         
         for (let i = 0; i < numVertex; i++){
-           k += (2 * Math.PI) / numVertex;  
-           x.vertices.push(Math.cos(k)); //push cos into vertices
-           x.vertices.push(Math.sin(k)); //push sin into veritces
+           k += (6 * Math.PI) / numVertex; 
+           x.vertices.push(2 / k * Math.cos(k)); //push cos into vertices
+           x.vertices.push(2 / k * Math.sin(k)); //push sin into veritces
            x.vertices.push(0); // so we can produce a circle and not lines
            x.indices.push(i); // push our loop into our indices
         
@@ -157,7 +157,7 @@
       gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, squareIndexBuffer);
 
       // Draw to the scene using triangle primitives
-      gl.drawElements(gl.LINE_LOOP, indices.length, gl.UNSIGNED_SHORT, 0);
+      gl.drawElements(gl.LINE_STRIP, indices.length, gl.UNSIGNED_SHORT, 0);
 
       // Clean
       gl.bindBuffer(gl.ARRAY_BUFFER, null);
