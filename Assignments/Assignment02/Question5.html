@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Translate a Triangle</title>
+
+<body onload="main()">
+<canvas id="webgl" width="400" height="400">
+    Please use a browser that supports "canvas"
+</canvas>
+</body>
+
+<script src="https://rawgit.com/huningxin/webglbook_examples/master/lib/webgl-utils.js"></script>
+<script src="https://rawgit.com/huningxin/webglbook_examples/master/lib/webgl-debug.js"></script>
+<script src="https://rawgit.com/huningxin/webglbook_examples/master/lib/cuon-utils.js"></script>
+<script type="text/javascript">
+    // HelloTriangle.js (c) 2012 matsuda
+    // Vertex shader program
+    // TranslatedTriangle.js (c) 2012 matsuda
+// Vertex shader program
+
+//Reference https://www.informit.com/articles/article.aspx?p=2111395&seqNum=3 
+
+// Lines of code labeled with - Marked are from ones I used from the above reference as I couldn't figure them out. 
+var VSHADER_SOURCE =
+  'attribute vec4 a_Position;\n' +
+  'uniform vec4 u_Translation;\n' +
+  'uniform vec4 u_scale;\n' +
+  'uniform float u_CosB, u_SinB; \n' + //marked 
+  'void main() {\n' +
+  ' gl_Position = a_Position + u_Translation;\n' +
+  ' gl_Position = a_Position * u_scale;\n' + // This for some reason removes the triangle 
+  ' gl_Position.x = a_Position.x * u_CosB - a_Position.y * u_SinB;\n' + // Equation to grab our x 
+  ' gl_Position.y = a_Position.x * u_SinB + a_Position.y * u_CosB;\n' + // Equation to grab our y 
+  ' gl_Position.z = a_Position.z;\n' + // Z stays the same 
+  '}\n';
+
+// Fragment shader program
+var FSHADER_SOURCE =
+  'void main() {\n' +
+  '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' +
+  '}\n';
+
+
+//translation 
+var Tx = 0.5, Ty = 0.5, Tz = 0.0;
+
+//scale
+var Sx = 1.0, Sy = 0.5, Sz = 1.0;
+
+// Rotation 
+var degrees = 30.0; 
+
+
+function main() {
+  // Retrieve <canvas> element
+  var canvas = document.getElementById('webgl');
+
+  // Get the rendering context for WebGL
+  var gl = getWebGLContext(canvas);
+  if (!gl) {
+    console.log('Failed to get the rendering context for WebGL');
+    return;
+  }
+
+  // Initialize shaders
+  if (!initShaders(gl, VSHADER_SOURCE, FSHADER_SOURCE)) {
+    console.log('Failed to intialize shaders.');
+    return;
+  }
+
+  // Write the positions of vertices to a vertex shader
+  var n = initVertexBuffers(gl);
+  if (n < 0) {
+    console.log('Failed to set the positions of the vertices');
+    return;
+  }
+
+
+  var u_Translation = gl.getUniformLocation(gl.program, 'u_Translation');
+  var u_scale = gl.getUniformLocation(gl.program, 'u_scale');
+  
+  if (!u_Translation) {
+    console.log('Failed to get the storage location of u_Translation');
+    return;
+  }
+  var r = 3.14 * degrees / 180.0; //Convert our degrees into a radian 
+  var cosB = Math.cos(r); //cos r
+  var sinB = Math.sin(r); //sin r 
+  
+  var u_CosB = gl.getUniformLocation(gl.program, 'u_CosB'); // Marked 
+  var u_SinB = gl.getUniformLocation(gl.program, 'u_SinB'); // Marked 
+  
+  gl.uniform4f(u_Translation, Tx, Ty, Tz, 0.0);
+  gl.uniform4f(u_scale, Sx, Sy, Sz, 0.0);
+  gl.uniform1f(u_CosB, cosB); //Marked 
+  gl.uniform1f(u_SinB, sinB); // Marked
+  // Specify the color for clearing <canvas>
+  gl.clearColor(0, 0, 0, 1);
+
+  // Clear <canvas>
+  gl.clear(gl.COLOR_BUFFER_BIT);
+
+  // Draw the rectangle
+  gl.drawArrays(gl.TRIANGLES, 0, n);
+}
+
+function initVertexBuffers(gl) {
+  var vertices = new Float32Array([
+    0, 0.5,   -0.5, -0.5,   0.5, -0.5
+  ]);
+  var n = 3; // The number of vertices
+
+  // Create a buffer object
+  var vertexBuffer = gl.createBuffer();
+  if (!vertexBuffer) {
+    console.log('Failed to create the buffer object');
+    return -1;
+  }
+
+  // Bind the buffer object to target
+  gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+  // Write date into the buffer object
+  gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+  // Assign the buffer object to the attribute variable
+  var a_Position = gl.getAttribLocation(gl.program, 'a_Position');
+  if (a_Position < 0) {
+    console.log('Failed to get the storage location of a_Position');
+    return -1;
+  }
+  gl.vertexAttribPointer(a_Position, 2, gl.FLOAT, false, 0, 0);
+
+  // Enable the assignment to a_Position variable
+  gl.enableVertexAttribArray(a_Position);
+
+  return n;
+}
+</script>
+</head>
+</html
