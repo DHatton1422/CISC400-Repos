@@ -18,18 +18,13 @@
     // Vertex shader program
     // TranslatedTriangle.js (c) 2012 matsuda
 // Vertex shader program
-
-//Reference https://www.informit.com/articles/article.aspx?p=2111395&seqNum=3 
-
-// Lines of code labeled with - Marked are from ones I used from the above reference as I couldn't figure them out. 
 var VSHADER_SOURCE =
   'attribute vec4 a_Position;\n' +
   'uniform vec4 u_Translation;\n' +
-  'uniform float u_CosB, u_SinB; \n' + //marked 
   'void main() {\n' +
   ' gl_Position = a_Position + u_Translation;\n' +
-  ' gl_Position.x = a_Position.x * u_CosB - a_Position.y * u_SinB;\n' + // Equation to grab our x 
-  ' gl_Position.y = a_Position.x * u_SinB + a_Position.y * u_CosB;\n' + // Equation to grab our y 
+  ' gl_Position.x = a_Position.x * cos(0.30) - a_Position.y * sin(0.30);\n' + // Equation to grab our x 
+  ' gl_Position.y = a_Position.x * sin(0.30) + a_Position.y * cos(0.30);\n' + // Equation to grab our y 
   ' gl_Position.z = a_Position.z;\n' + // Z stays the same 
   '}\n';
 
@@ -39,12 +34,8 @@ var FSHADER_SOURCE =
   '  gl_FragColor = vec4(1.0, 0.0, 0.0, 1.0);\n' +
   '}\n';
 
-
-//translation 
+// The translation distance for x, y, and z direction
 var Tx = 0.5, Ty = 0.5, Tz = 0.0;
-
-// Rotation 
-var degrees = 30.0; 
 
 function main() {
   // Retrieve <canvas> element
@@ -70,23 +61,14 @@ function main() {
     return;
   }
 
-
+  // Pass the translation distance to the vertex shader
   var u_Translation = gl.getUniformLocation(gl.program, 'u_Translation');
-  
   if (!u_Translation) {
     console.log('Failed to get the storage location of u_Translation');
     return;
   }
-  var r = 3.14 * degrees / 180.0; //Convert our degrees into a radian 
-  var cosB = Math.cos(r); //cos r
-  var sinB = Math.sin(r); //sin r 
-  
-  var u_CosB = gl.getUniformLocation(gl.program, 'u_CosB'); // Marked 
-  var u_SinB = gl.getUniformLocation(gl.program, 'u_SinB'); // Marked 
-  
   gl.uniform4f(u_Translation, Tx, Ty, Tz, 0.0);
-  gl.uniform1f(u_CosB, cosB); //Marked 
-  gl.uniform1f(u_SinB, sinB); // Marked
+
   // Specify the color for clearing <canvas>
   gl.clearColor(0, 0, 0, 1);
 
